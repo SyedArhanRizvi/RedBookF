@@ -1,0 +1,201 @@
+.userPage {
+    width: 100vw;
+    min-height: 100vh;
+    /* Ensure it takes full height of viewport */
+    display: flex;
+    position: relative;
+    color: white;
+    background: #000;
+}
+
+.userPage .sidePage {
+    width: 15vw;
+    height: 100vh;
+    /* Set to viewport height */
+    position: fixed;
+    /* Fix position so it doesn't scroll */
+    top: 0;
+    left: 0;
+    background: #101010;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-top: 1px solid rgba(39, 39, 39, 0.824);
+    border-right: 1px solid rgba(39, 39, 39, 0.824);
+    z-index: 1;
+}
+
+.userPage .sidePage .s1 {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    gap: 20px;
+}
+
+.userPage .sidePage .s1 p {
+    cursor: pointer;
+    transition: 0.5s;
+    padding: 10px 60px;
+}
+
+.userPage .sidePage .s1 p:hover {
+    background: rgba(39, 39, 39, 0.925);
+}
+
+.userPage .sidePage .s2 {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+}
+
+.userPage .sidePage .s2 .p {
+    cursor: pointer;
+
+    transition: 0.5s;
+}
+
+.userPage .sidePage .s2 .p:hover {
+    color: rgb(255, 153, 153);
+}
+
+.userPage .sidePage .s2 .btn {
+    padding: 10px 40px;
+    background: maroon;
+    border: 1px solid maroon;
+    color: white;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.userPage .sidePage .s2 .btn:hover {
+    background: #000;
+    border: 1px solid silver;
+}
+
+.userPage .maindiv {
+    margin-left: 15vw;
+    /* Adjust for sidebar width */
+    width: 85vw;
+    min-height: 100vh;
+    /* Full height */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 1px solid rgba(39, 39, 39, 0.824);
+}
+
+.userPage .maindiv .nav {
+    width: 100%;
+    height: auto;
+    /* Adjust height for content */
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.userPage .maindiv .nav .user {
+    width: auto;
+    display: flex;
+    gap: 5px;
+}
+
+.userPage .maindiv .nav .user .img {
+    height: 4rem;
+    width: 4rem;
+    overflow: hidden;
+    padding: 5px;
+}
+
+.userPage .maindiv .nav .user .img img {
+    height: 100%;
+    width: 100%;
+    border: 1px solid white;
+    border-radius: 50%;
+}
+
+.userPage .maindiv .nav .user .details {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.userPage .maindiv .nav .user .details h3 {
+    font-weight: bold;
+}
+
+.userPage .maindiv .nav .user .details p {
+    color: gray;
+}
+
+.userPage .maindiv .nav .user .details p span {
+    color: white;
+}
+
+.userPage .maindiv .nav .notifications {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.userPage .maindiv .nav .notifications .logout {
+    padding: 8px 40px;
+    background: maroon;
+    cursor: pointer;
+    border: 1px solid maroon;
+    transition: 0.5s;
+}
+
+.userPage .maindiv .nav .notifications .logout:hover {
+    background: #000;
+    border: 1px solid silver;
+}
+
+.userPage .maindiv .body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.userPage .maindiv .body .persnol {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(39, 39, 39, 0.824);
+    padding-bottom: 15px;
+}
+
+.userPage .maindiv .body .persnol div {
+    width: 14%;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.userPage .maindiv .body .persnol div:hover {
+    background: rgba(39, 39, 39, 0.925);
+}
+
+.userPage .maindiv .body .postContainer {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+    padding-top: 40px;
+}
+
+.userPage .maindiv .body .postContainer .card {
+    width: 100%;
+    max-width: 300px;
+    height: 300px;
+    background: cadetblue;
+}
