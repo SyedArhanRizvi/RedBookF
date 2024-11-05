@@ -6,10 +6,12 @@ import Login from './Components/Account/Log/Login';
 import CreateNewAc from './Components/Account/Sign/CreateNewAc';
 import Admin from './Components/Account/Admin/Admin';
 import MainSection from './Components/Home/Section1/MainSection';
+import { AppProvider } from '../Context/userAuthContext';
 function App() {
   
 
   return (
+    <AppProvider>
     <main>
     <BrowserRouter>
     <Navabar></Navabar>
@@ -22,6 +24,7 @@ function App() {
      </Routes>
      </BrowserRouter>
     </main>
+    </AppProvider>
   )
 }
 

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import "./CreateNewAc.css";
-import { Link } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom'; 
+import axios from 'axios';
 
 function CreateNewAc() {
+    const navigate = useNavigate();
     {/* fullName,username,email,phone,password */}
     const [fullName, setFullName] = useState('');
     const [username, setUsername] = useState('');
@@ -13,7 +15,18 @@ function CreateNewAc() {
     const newAccountHandler = async (e)=>{
         e.preventDefault();
         try {
-            
+          const createdUser =  await axios.post("http://localhost:3500/api/user/createUserAccount", {fullName,username,email,phone,password}, { withCredentials: true });
+          localStorage.setItem("REDBOOK_User", JSON.stringify(createdUser.data.createdUser));
+          console.log(createdUser.data.createdUser);
+          setFullName('');
+          setUsername('');
+          setEmail('');
+          setPassword('');
+          setPhone('');
+
+          if(createdUser.status === 201) {
+            navigate("/adminPage")
+          }
         } catch (error) {
            console.log("There is some errors in your new account handler plz fix the bug first ", error);  
         }

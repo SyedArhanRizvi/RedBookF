@@ -83,20 +83,26 @@
     cursor: pointer;
     transition: 0.5s;
 }
+.logInPage .formParent .additionalForm p:hover{
+    background: #000;
+    color: white;
+    border: 1px solid silver;
+}
 .logInPage .formParent .additionalForm p span {
     font-weight: bold;
 }
-.logInPage .formParent .additionalForm .g:hover{
+.logInPage .formParent .additionalForm .g{
     background: #ffffff;
     color: black;
 }
-.logInPage .formParent .additionalForm .f:hover{
+.logInPage .formParent .additionalForm .f{
     background: #04b8ff;
     color: black;
     border: none;
 }
-.logInPage .formParent .additionalForm .a:hover{
-    background: #888686;
+.logInPage .formParent .additionalForm .a{
+    background: maroon;
+    border: 1px solid maroon;
     /* color: rgb(255, 0, 0); */
 }
 .logInPage .others{

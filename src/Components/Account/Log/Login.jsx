@@ -1,13 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Login.css";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  
 
   const loginHandler = async (e)=>{
     e.preventDefault();
-    console.log(email, password);
+    try {
+      const loggedInUser = await axios.post("http://localhost:3500/api/user/loginAccount", {email,password}, { withCredentials: true });
+      localStorage.setItem("REDBOOK_User", JSON.stringify(loggedInUser.data.user));
+      console.log(loggedInUser.data.user);
+      
+      if(loggedInUser.status === 200) {
+        navigate("/adminPage");
+      }
+    } catch (error) {
+      console.log("There is some errors in your login handler plz fix the bug first ", error); 
+    }
     
   }
 

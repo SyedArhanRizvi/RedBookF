@@ -8,6 +8,257 @@
     background: #000;
 }
 
+/* POP UP SECTION */
+.userPage .logoutPopUp {
+    position: fixed;
+    top: 20%;
+    left: 23%;
+    height: 60vh;
+    width: 60vw;
+    border: 1px solid silver;
+    background: #000;
+    color: white;
+    z-index: 500;
+    box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+    -webkit-box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+    -moz-box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+}
+.userPage .adminAcPopUp {
+    position: fixed;
+    top: 20%;
+    left: 23%;
+    height: 60vh;
+    width: 60vw;
+    border: 1px solid silver;
+    background: #000;
+    color: white;
+    z-index: 500;
+    box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+    -webkit-box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+    -moz-box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+}
+
+.userPage .logoutPopUp form {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+}
+
+.userPage .logoutPopUp form input {
+    width: 80%;
+    height: 3rem;
+    border: 1px solid silver;
+    background: #000;
+    color: white;
+    padding-left: 4px;
+}
+
+.userPage .logoutPopUp form .btn {
+    width: 80%;
+    height: 3rem;
+    border: 1px solid maroon;
+    background: maroon;
+    color: white;
+    padding-left: 4px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.userPage .logoutPopUp form .goBack {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+    transition: 0.5s;
+}
+
+.userPage .logoutPopUp form .goBack:hover {
+    color: maroon;
+}
+
+.userPage .logoutPopUp form .btn:hover {
+    background: #000;
+    border: 1px solid silver;
+}
+
+.userPage .logout2PpUp {
+    position: fixed;
+    top: 20%;
+    left: 25%;
+    height: 50vh;
+    width: 50vw;
+    border: 1px solid silver;
+    background: #000;
+    color: white;
+    z-index: 500;
+    box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+    -webkit-box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+    -moz-box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.userPage .logout2PpUp div {
+    width: 90%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+}
+
+.userPage .logout2PpUp div p {
+    word-spacing: 5px;
+    /* column-gap: 10px; */
+}
+
+.userPage .logout2PpUp div button {
+    width: 40%;
+    color: white;
+    font-weight: bold;
+    height: 3rem;
+    background: maroon;
+    border: 1px solid maroon;
+    cursor: pointer;
+    /* border: none; */
+    transition: 0.5s;
+}
+
+.userPage .logout2PpUp div button:hover {
+    background: #000;
+    border: 1px solid white;
+    color: white;
+}
+
+.userPage .editAcPopUp {
+    position: fixed;
+    top: 40px;
+    left: 80px;
+    width: 90vw;
+    height: 90vh;
+    border: 1px solid silver;
+    background: #000;
+    color: white;
+    z-index: 500;
+    box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+    -webkit-box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+    -moz-box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+}
+
+.userPage .editAcPopUp form {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.userPage .editAcPopUp form input {
+    width: 60%;
+    height: 8%;
+    padding-left: 5px;
+    background: #000;
+    color: white;
+    border: 1px solid silver;
+}
+
+.userPage .editAcPopUp form button {
+    height: 3rem;
+    width: 10%;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    align-self: flex-end;
+    margin-right: 20px;
+    cursor: pointer;
+    transition: 0.5s;
+    color: white;
+}
+
+.userPage .editAcPopUp form .submit {
+    background: maroon;
+    border: 1px solid maroon;
+    height: 3rem;
+    width: 10%;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    align-self: flex-end;
+    margin-right: 20px;
+    cursor: pointer;
+    transition: 0.5s;
+    color: white;
+}
+
+.userPage .editAcPopUp form .cancel {
+    background: yellowgreen;
+    border: 1px solid yellowgreen;
+    color: black;
+}
+
+.userPage .editAcPopUp form button:hover {
+    background: #000;
+    color: white;
+    border: 1px solid white;
+}
+
+.userPage .editAcPopUp form .submit:hover {
+    background: #000;
+    color: white;
+    border: 1px solid white;
+}
+
+.userPage .editAcPopUp form .img {
+    width: 60%;
+    height: 18%;
+    /* background: cadetblue; */
+    display: flex;
+    align-items: center;
+    /* flex-direction: column; */
+    gap: 10px;
+
+}
+
+.userPage .editAcPopUp form .img label {
+    cursor: pointer
+}
+
+.userPage .editAcPopUp form .img div {
+    /* background: rebeccapurple; */
+    width: 6rem;
+    height: 65%;
+    border-radius: 50%;
+    text-align: center;
+    border: 1px solid silver;
+    overflow: hidden;
+}
+
+.userPage .editAcPopUp form .img div p {
+    margin-top: 30px;
+}
+
+.userPage .editAcPopUp form .img div img {
+    height: 100%;
+    width: 100%;
+}
+
+.userPage .editAcPopUp form .img input {
+    display: none;
+}
+
+/*  ----------------------  */
 .userPage .sidePage {
     width: 15vw;
     height: 100vh;
@@ -34,13 +285,22 @@
     gap: 20px;
 }
 
-.userPage .sidePage .s1 p {
+.userPage .sidePage .s1 .normalPara {
     cursor: pointer;
     transition: 0.5s;
-    padding: 10px 60px;
+    padding: 10px 30px;
 }
 
-.userPage .sidePage .s1 p:hover {
+.userPage .sidePage .s1 .mainPara {
+    cursor: pointer;
+    transition: 0.5s;
+    padding: 10px 30px;
+    border-bottom: 1px solid rgba(39, 39, 39, 0.824);
+    border-top: 1px solid rgba(39, 39, 39, 0.824);
+    cursor: none;
+}
+
+.userPage .sidePage .s1 .normalPara:hover {
     background: rgba(39, 39, 39, 0.925);
 }
 
@@ -101,11 +361,12 @@
     width: auto;
     display: flex;
     gap: 5px;
+
 }
 
 .userPage .maindiv .nav .user .img {
-    height: 4rem;
-    width: 4rem;
+    height: 4.5rem;
+    width: 80px;
     overflow: hidden;
     padding: 5px;
 }
@@ -113,14 +374,15 @@
 .userPage .maindiv .nav .user .img img {
     height: 100%;
     width: 100%;
-    border: 1px solid white;
+    border: 1px solid silver;
     border-radius: 50%;
 }
 
 .userPage .maindiv .nav .user .details {
-    width: 70%;
+    width: 100%;
     display: flex;
     flex-direction: column;
+    /* background: rebeccapurple; */
     gap: 3px;
 }
 
@@ -134,12 +396,14 @@
 
 .userPage .maindiv .nav .user .details p span {
     color: white;
+    font-family: sans-serif;
 }
 
 .userPage .maindiv .nav .notifications {
     display: flex;
     align-items: center;
     gap: 20px;
+    padding-right: 20px;
 }
 
 .userPage .maindiv .nav .notifications .logout {

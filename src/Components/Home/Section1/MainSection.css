@@ -1,35 +1,162 @@
-/* Container for the main content */
 .mainSection {
     margin-left: 250px;
-    /* Offset the main section to the right of the sidebar */
     width: calc(100vw - 250px);
-    /* Adjust width to exclude sidebar width */
     min-height: 100vh;
-    /* Sufficient height for scrolling */
     background: #000;
     color: white;
     position: relative;
     padding: 20px;
-    /* Optional padding */
     border-left: 1px solid rgba(39, 39, 39, 0.824);
 }
 
-/* Sidebar styling */
 .mainSection .filter {
     width: 250px;
- 
     height: 100vh;
     position: fixed;
-   
     top: 0;
     left: 0;
     background: black;
     padding: 20px;
     z-index: 1000;
-    
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    /* align-items: center; */
     box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5);
-   
+    padding-top: 44px;
+
+}
+.mainSection .filter .logo h1 a {
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+.mainSection .filter .sort-filter {
+    border-bottom: 1px solid rgba(39, 39, 39, 0.824);
+    padding-bottom: 10px;
+}
+
+.mainSection .filter .sort-filter form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+
+.mainSection .filter .sort-filter form select {
+    background: rgb(24, 24, 24);
+    height: 1.9rem;
+    color: white;
+}
+
+.mainSection .filter .sort-filter form button {
+    height: 1.8rem;
+    border: none;
+    cursor: pointer;
+    transition: 0.5s;
+    border: 1px solid silver;
+    background: black;
+    color: white;
+}
+
+.mainSection .filter .filterByCategory {
+    border-bottom: 1px solid rgba(39, 39, 39, 0.824);
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mainSection .filter .filterByCategory select {
+    background: rgb(24, 24, 24);
+    height: 1.9rem;
+    color: white;
+}
+
+.price-filter {
+    border-bottom: 1px solid rgba(39, 39, 39, 0.824);
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.price-filter .rangeInput {
+    -webkit-appearance: none;
+    /* Ensures no default styling */
+    appearance: none;
+    width: 100%;
+    /* Full width of the range input */
+    background: #4b4b4b;
+    /* Track background color */
+    outline: none;
+    /* Remove outline */
+    border-radius: 5px;
+    /* Rounded corners for the track */
+    height: 8px;
+    /* Height of the range track */
+}
+
+.price-filter .rangeInput::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    /* Removes default thumb styling */
+    appearance: none;
+    width: 20px;
+    /* Width of the thumb */
+    height: 20px;
+    /* Height of the thumb */
+    background-color: #ededed;
+    /* Thumb color */
+    border-radius: 50%;
+    /* Make the thumb circular */
+    cursor: pointer;
+    /* Cursor when hovering over the thumb */
+}
+
+.price-filter .rangeInput::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background-color: #71be05;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+
+/* Firefox specific styling for the thumb */
+.mainSection .filter .price-filter .rangeInput::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background-color: #ff9b37;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.mainSection .filter .filterByName {
+    border-bottom: 1px solid rgba(39, 39, 39, 0.824);
+    padding-bottom: 10px;
+}
+.mainSection .filter .filterByName input{
+    width: 100%;
+    height: 2rem;
+    background: #000;
+    border: 1px solid silver;
+    color: white;
+    padding-left: 5px;
+}
+.mainSection .filter .book-filter {
+    border-bottom: 1px solid rgba(39, 39, 39, 0.824);
+    padding-bottom: 10px;
+    cursor: pointer;
+}
+.mainSection .filter .author-filter {
+    border-bottom: 1px solid rgba(39, 39, 39, 0.824);
+    padding-bottom: 10px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.mainSection .filter .author-filter select {
+    background: rgb(24, 24, 24);
+    height: 1.9rem;
+    color: white;
 }
