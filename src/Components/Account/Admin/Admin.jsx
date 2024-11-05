@@ -2,58 +2,64 @@ import React, { useEffect, useState } from "react";
 import "./Admin.css";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import Cart from "../../Collections/Cart/Cart";
+import UserPost from "../../Collections/Posts/UserPost";
+import Wishlist from "../../Collections/Wishlist/Wishlist";
 
 function Admin() {
   // const [acFunc, setAcFunc] = useState(false);
   const navigate = useNavigate();
-  const [forAdmin, setForAdmin] = useState(false);
-  const [redBookUser, setRedBookUser] = useState(
-    JSON.parse(localStorage.getItem("REDBOOK_User")) || ""
-  );
 
+  const [redBookUser, setRedBookUser] = useState(JSON.parse(localStorage.getItem("REDBOOK_User")) || "");
+  const [forAdmin, setForAdmin] = useState(redBookUser && redBookUser.admin);
   // POP UP STATES ::
   const [logoutPopUp, setLogOutPopUp] = useState(false);
   const [deletePopUp, setDeletePopUp] = useState(false);
   const [editAcPopUp, setEditAcPopUp] = useState(false);
   const [adminLoginPopUp, setAdminPopUp] = useState(false);
+  const [removedAcPopUp, setRemovedAcPopUp] = useState(false);
 
+  // FOR BASIC DETAILS STATES ::
+  const [authorType, setAuthorType] = useState('');
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState(redBookUser && redBookUser.fullName);
   const [username, setUsername] = useState(redBookUser && redBookUser.username);
   const [email, setEmail] = useState(redBookUser && redBookUser.email);
   const [phone, setPhone] = useState(redBookUser && redBookUser.phone);
   const [userProfileImg, setUserProfileImg] = useState();
-  const [imageSrc, setImageSrc] = useState(
-    redBookUser && redBookUser.userProfileImg
-  );
-  const [description, setDescription] = useState(
-    redBookUser && redBookUser.userDescription
-  );
+  const [imageSrc, setImageSrc] = useState(redBookUser && redBookUser.userProfileImg);
+  const [description, setDescription] = useState(redBookUser && redBookUser.userDescription);
 
-
+  // PopUp for Wishlist and Cart and User Posts Container ::
+  const [userPostsC, setUserPostsC] = useState(false);
+  const [userWishListC, setUserWishListC] = useState(false);
+  const [userCartC, setUserCartC] = useState(true);
+  
+  // All Functions 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     setUserProfileImg(event.target.files[0]);
     console.log(userProfileImg);
-    
+
     if (file) {
       const reader = new FileReader();
       reader.onload = () => setImageSrc(reader.result);
       reader.readAsDataURL(file);
     }
   };
-
-  const logoutHandler = async () => {
+  const deleteAccount = async (e) => {
+    e.preventDefault();
+    console.log(email, password);
+    
     try {
       const deletedUser = await axios.post(
-        `http://localhost:3500/api/user/loggedOutAccount/${redBookUser._id}`,
-        {},
-        { withCredentials: true }
+        "http://localhost:3500/api/user/deleteUserAccount",
+        {email, password},
+        {withCredentials: true}
       );
       console.log(deletedUser);
-
-      if (deletedUser.status === 200) {
-        localStorage.clear();
+      if (deletedUser.status === 201) {
+        localStorage.removeItem("REDBOOK_User");
         navigate("/");
       }
     } catch (error) {
@@ -63,8 +69,7 @@ function Admin() {
       );
     }
   };
-
-  const editAccountHandler = async (e)=>{
+  const editAccountHandler = async (e) => {
     e.preventDefault();
     const data = new FormData();
     data.append("fullName", fullName);
@@ -73,39 +78,70 @@ function Admin() {
     data.append("userProfileImg", userProfileImg);
     data.append("phone", phone);
     data.append("email", email);
-    try { 
-      const updatedUser = await axios.put(`http://localhost:3500/api/user/updateAccount/${redBookUser && redBookUser._id}`, 
-      data,
-      {withCredentials:true}
+    try {
+      const updatedUser = await axios.put(
+        `http://localhost:3500/api/user/updateAccount/${
+          redBookUser && redBookUser._id
+        }`,
+        data,
+        { withCredentials: true }
       );
-      if(updatedUser.status === 201) {
-        localStorage.setItem("REDBOOK_User", JSON.stringify(updatedUser.data.updatedUser));
+      if (updatedUser.status === 201) {
+        localStorage.setItem(
+          "REDBOOK_User",
+          JSON.stringify(updatedUser.data.updatedUser)
+        );
         setEditAcPopUp(false);
       }
     } catch (error) {
-      console.log("There is some errors in your edit form handler plz fix the bug first ", error);    
+      console.log(
+        "There is some errors in your edit form handler plz fix the bug first ",
+        error
+      );
     }
-  }
-  /*const logoutHandler = async (e)=> {
+  };
+  const adminAccountController = async (e)=>{
     e.preventDefault();
     try {
-       const deletedUser = await axios.post("http://localhost:3500/api/user/loggedOutAccount", {email, password}, {withCredentials:true});
-      if(deletedUser.status === 201) {
+      const createdAdmin = await axios.put("http://localhost:3500/api/user/createAdminAccount", {email, password, authorType});
+      if(createdAdmin.status === 201) {
+        localStorage.setItem("REDBOOK_User", JSON.stringify(createdAdmin.data.user));
+        setForAdmin(true);
+        setAdminPopUp(false);
+      }
+    } catch (error) {
+      console.log("There is some errors in your admin account controller function plz fix the bug first ", error);    
+    }
+  }
+  const removeAdminAccountHandler = async ()=>{
+    try {
+      const removedAdmin = await axios.put(`http://localhost:3500/api/user/removeAdminAccount${redBookUser._id}`, {}, {withCredentials:true});
+      if(removedAdmin.status === 201) {
+        localStorage.setItem("REDBOOK_User", JSON.stringify(removedAdmin.data.removedAdmin));
+        setRemovedAcPopUp(false);
+      }
+    } catch (error) {
+      console.log("There is some errors in your remove admin account handler plz fix the bug first ", error);   
+    }
+  }
+  const logoutHandler = async (e)=> {
+    try {
+       const deletedUser = await axios.post(`http://localhost:3500/api/user/loggedOutAccount/${redBookUser._id}`, {}, {withCredentials:true});
+      if(deletedUser.status === 200) {
         localStorage.removeItem("REDBOOK_User");
         navigate("/");
       }
     } catch (error) {
       console.log("There is some errors in your logout handler plz fix the bug first ", error);  
     }
-  } */
+  }
+
   return (
-
     <section className="userPage">
-
       {/* POP FOR DELETE THE ACCOUNT */}
       {deletePopUp && (
         <div className="logoutPopUp">
-          <form onSubmit={logoutHandler}>
+          <form onSubmit={deleteAccount}>
             <input
               type="text"
               name="email"
@@ -122,7 +158,7 @@ function Admin() {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            <input type="submit" value={"Logout"} className="btn" />
+            <input type="submit" value={"Delete Account"} className="btn" />
             <p
               className="goBack"
               onClick={() => setDeletePopUp((prev) => !prev)}
@@ -137,6 +173,7 @@ function Admin() {
       {logoutPopUp && (
         <div className="logout2PpUp">
           <div>
+            <h1 style={{color:"red", borderBottomStyle:"groove"}}>Warning</h1>
             <p>
               "Are you sure you want to log out? Logging out will end your
               current session, and any unsaved changes may be lost. To continue
@@ -157,7 +194,7 @@ function Admin() {
             <div className="img">
               <div>
                 {imageSrc ? (
-                  <img src={imageSrc} alt="Selected"/>
+                  <img src={imageSrc} alt="Selected" />
                 ) : (
                   <p>No image</p>
                 )}
@@ -200,7 +237,7 @@ function Admin() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <input type="submit" className="submit" value={"Submit"}/>
+            <input type="submit" className="submit" value={"Submit"} />
             {/* <button className="submit">Submit</button> */}
             <button
               className="cancel"
@@ -213,16 +250,57 @@ function Admin() {
       )}
 
       {/* POP UP FOR ADMIN ACCOUNT CREATION */}
-
-      {/* <div className="adminAcPopUp">
-        <form>
-          <input type="text" name="email" placeholder="Enter your email here.."/>
-          <input type="text" name="email" placeholder="Enter your email here.."/>
-          <input type="text" name="email" placeholder="Enter your email here.."/>
-          <input type="text" name="email" placeholder="Enter your email here.."/>
-          <input type="text" name="email" placeholder="Enter your email here.."/>
+      {
+        adminLoginPopUp &&   <div className="adminAcPopUp">
+        <form onSubmit={adminAccountController}>
+          <input
+            type="text"
+            name="email"
+            placeholder="Enter your email here.."
+            onChange={(e)=>setEmail(e.target.value)}
+          />
+          <input
+            type="text"
+            name="password"
+            placeholder="Enter your password here.."
+            onChange={(e)=>setPassword(e.target.value)}
+          />
+          <select name="writerCategory" id="writerCategory" onChange={(e)=>setAuthorType(e.target.value)}>
+            <option value="" disabled selected>
+              Select writer category
+            </option>
+            <option value="poet">Poet</option>
+            <option value="novelist">Novelist</option>
+            <option value="essayist">Essayist</option>
+            <option value="journalist">Journalist</option>
+            <option value="playwright">Playwright</option>
+            <option value="screenwriter">Screenwriter</option>
+            <option value="biographer">Biographer</option>
+            <option value="critic">Critic</option>
+            <option value="travel-writer">Travel Writer</option>
+            <option value="technical-writer">Technical Writer</option>
+            <option value="children-writer">Children’s Writer</option>
+            <option value="science-writer">Science Writer</option>
+            <option value="other-writer">Other Writer</option>
+          </select>
+          <input className="btn" type="submit" value={"Create Admin Account"} />
+          <button className="cancel" onClick={() => setAdminPopUp((prev) => !prev)}>Cancel</button>
         </form>
-      </div> */}
+      </div>
+      }
+
+      {
+        removedAcPopUp && <div className="removedAcPopUp">
+          <div><h1 style={{color:"red", borderBottomStyle:"groove"}}>Warning</h1>
+          <p>"Are you sure you want to remove your admin account? You will not access your lots of REDBOOK features like would't add your books in our platform and you would't access your current book data To continue
+              using all features and keep your data secure, make sure to save
+              your work before remove your account. You’ll need to log in again to
+              access your account and resume your activity."</p>
+              <button onClick={removeAdminAccountHandler}>Remove</button>
+              <button className="cancel" onClick={()=>setRemovedAcPopUp(false)}>Cancel</button></div>
+        </div>
+      }
+    
       {/* --------------------- */}
       <div className="sidePage">
         <div className="s1">
@@ -244,7 +322,6 @@ function Admin() {
             </p>{" "}
             <p className="normalPara">Share Account</p>
           </>
-
           <p className="normalPara">ChatBot</p>
           <p className="normalPara">Explore</p>
           <p className="mainPara">Settings</p>
@@ -253,8 +330,11 @@ function Admin() {
           <p className="normalPara">Change Password</p>
         </div>
         <div className="s2">
-          <p className="p">Want to became an admin ?</p>
-          <p className="btn">Delete Account</p>
+          {
+            forAdmin ? <p className="p" onClick={()=>setRemovedAcPopUp(true)}>Remove Admin Account</p> : <p className="p" onClick={()=>setAdminPopUp((prev)=>!prev)}>Want to became an admin ?</p>
+          }
+          
+          <p className="btn" onClick={()=>setDeletePopUp(true)}>Delete Account</p>
         </div>
       </div>
       <div className="maindiv">
@@ -269,6 +349,7 @@ function Admin() {
               <p>
                 <span>{redBookUser && redBookUser.userDescription}.</span>
               </p>
+              <p><span className="authorType">{redBookUser.admin && redBookUser.authorType.toUpperCase()}</span></p>
             </div>
           </div>
           <div className="notifications">
@@ -290,23 +371,41 @@ function Admin() {
             <div>
               <h2>Following {redBookUser && redBookUser.following.length}</h2>
             </div>
-            <div>
+            {
+              redBookUser.admin && <div style={{backgroundColor:userPostsC && "rgba(39, 39, 39, 0.925)"}} 
+              onClick={()=>{
+                setUserPostsC(true);
+                setUserWishListC(false);
+                setUserCartC(false);
+              }}><h2>Posted Books {redBookUser.postedBooks.length}</h2></div>
+            }
+            <div style={{backgroundColor:userCartC && "rgba(39, 39, 39, 0.925)"}} 
+              onClick={()=>{
+              setUserCartC(true);
+              setUserWishListC(false);
+              setUserPostsC(false);
+            }}>
               <h2>Cart Items {redBookUser && redBookUser.cart.length}</h2>
             </div>
-            <div>
+            <div style={{backgroundColor:userWishListC && "rgba(39, 39, 39, 0.925)"}}
+             onClick={()=>{
+              setUserWishListC(true);
+              setUserCartC(false);
+              setUserPostsC(false);
+            }}>
               <h2>Wishlist {redBookUser && redBookUser.wishlist.length}</h2>
             </div>
           </div>
           <div className="postContainer">
-            <div className="card">
-              <h1>Hello</h1>
-            </div>
-            <div className="card">
-              <h1>Hello</h1>
-            </div>
-            <div className="card">
-              <h1>Hello</h1>
-            </div>
+           {
+            userCartC && <Cart/>
+           }
+           {
+            userPostsC && <UserPost></UserPost>
+           }
+           {
+            userWishListC && <Wishlist></Wishlist>
+           }
           </div>
         </div>
       </div>

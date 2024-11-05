@@ -9,7 +9,6 @@ import MainSection from './Components/Home/Section1/MainSection';
 import { AppProvider } from '../Context/userAuthContext';
 function App() {
   
-
   return (
     <AppProvider>
     <main>

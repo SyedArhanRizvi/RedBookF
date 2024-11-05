@@ -258,6 +258,134 @@
     display: none;
 }
 
+.userPage .removedAcPopUp {
+    position: fixed;
+    top: 20%;
+    left: 25%;
+    height: 50vh;
+    width: 50vw;
+    border: 1px solid silver;
+    background: #000;
+    color: white;
+    z-index: 500;
+    box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+    -webkit-box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+    -moz-box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.userPage .removedAcPopUp div {
+    width: 90%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+}
+
+.userPage .removedAcPopUp div p {
+    word-spacing: 5px;
+    /* column-gap: 10px; */
+}
+
+.userPage .removedAcPopUp div button {
+    width: 40%;
+    color: white;
+    font-weight: bold;
+    height: 3rem;
+    background: maroon;
+    border: 1px solid maroon;
+    cursor: pointer;
+    /* border: none; */
+    transition: 0.5s;
+}
+
+.userPage .removedAcPopUp div button:hover {
+    background: #000;
+    border: 1px solid white;
+    color: white;
+}
+
+.userPage .adminAcPopUp{
+    position: fixed;
+    top: 20%;
+    left: 23%;
+    width: 60vw;
+    height: 60vh;
+    border: 1px solid silver;
+    background: #000;
+    color: white;
+    z-index: 500;
+    box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+    -webkit-box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+    -moz-box-shadow: -1px 3px 84px 200px rgba(0, 0, 0, 0.71);
+}
+
+.userPage .adminAcPopUp form{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+.userPage .adminAcPopUp form .cancel {
+    width: 60%;
+    height: 10%;
+    background: yellowgreen;
+    border: 1px solid yellowgreen;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.userPage .adminAcPopUp form  input {
+    width: 60%;
+    height: 10%;
+    padding-left: 5px;
+    background: #000;
+    color: white;
+    border: 1px solid silver;
+}
+.userPage .adminAcPopUp form  select {
+    width: 60%;
+    height: 10%;
+    padding-left: 5px;
+    background: #000;
+    color: white;
+    border: 1px solid silver;
+    font-weight: bold;
+    cursor: pointer;
+}
+.userPage .adminAcPopUp form  select option {
+    font-weight: bold;
+    cursor: pointer;
+}
+.userPage .adminAcPopUp form  .btn {
+    width: 60%;
+    height: 10%;
+    padding-left: 5px;
+    background: maroon;
+    color: white;
+    border: 1px solid maroon;
+    cursor: pointer;
+    transition: 0.5s;
+}
+.userPage .adminAcPopUp form  .btn:hover{
+    background: #000;
+    border: 1px solid silver;
+}
+.userPage .adminAcPopUp form  .cancel:hover{
+    background: #000;
+    color: white;
+    border: 1px solid silver;
+}
 /*  ----------------------  */
 .userPage .sidePage {
     width: 15vw;
@@ -282,7 +410,7 @@
     display: flex;
     flex-direction: column;
     text-align: start;
-    gap: 20px;
+    gap: 10px;
 }
 
 .userPage .sidePage .s1 .normalPara {
@@ -391,14 +519,17 @@
 }
 
 .userPage .maindiv .nav .user .details p {
-    color: gray;
+    color: rgb(195, 194, 194);
 }
 
 .userPage .maindiv .nav .user .details p span {
     color: white;
     font-family: sans-serif;
 }
-
+.userPage .maindiv .nav .user .details p .authorType {
+    color: gray;
+    border-bottom-style: dashed;
+}
 .userPage .maindiv .nav .notifications {
     display: flex;
     align-items: center;
@@ -432,16 +563,18 @@
     align-items: center;
     border-bottom: 1px solid rgba(39, 39, 39, 0.824);
     padding-bottom: 15px;
+    padding-right: 10px;
 }
 
 .userPage .maindiv .body .persnol div {
-    width: 14%;
+    width: 18%;
     height: 3rem;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: 0.5s;
+    /* margin-right: 10px; */
 }
 
 .userPage .maindiv .body .persnol div:hover {
@@ -455,11 +588,6 @@
     justify-content: space-around;
     gap: 20px;
     padding-top: 40px;
-}
-
-.userPage .maindiv .body .postContainer .card {
-    width: 100%;
-    max-width: 300px;
-    height: 300px;
-    background: cadetblue;
+    position: relative;
+    /* background: cadetblue; */
 }
