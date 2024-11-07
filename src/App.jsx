@@ -7,6 +7,7 @@ import CreateNewAc from './Components/Account/Sign/CreateNewAc';
 import Admin from './Components/Account/Admin/Admin';
 import MainSection from './Components/Home/Section1/MainSection';
 import { AppProvider } from '../Context/userAuthContext';
+import AddNewBook from './Components/AddProduct/AddNewBook';
 function App() {
   
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/createNewAc" element={<CreateNewAc></CreateNewAc>}></Route>
         <Route path="/adminPage" element={<Admin></Admin>}></Route>
         <Route path="/mainSection" element={<MainSection></MainSection>}></Route>
+        <Route path="/addNewBook" element={<AddNewBook></AddNewBook>}></Route>
      </Routes>
      </BrowserRouter>
     </main>

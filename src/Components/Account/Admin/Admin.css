@@ -418,6 +418,10 @@
     transition: 0.5s;
     padding: 10px 30px;
 }
+.userPage .sidePage .s1 .normalPara a{
+    text-decoration: none;
+    color: white;
+}
 
 .userPage .sidePage .s1 .mainPara {
     cursor: pointer;

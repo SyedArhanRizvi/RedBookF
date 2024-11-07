@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import Cart from "../../Collections/Cart/Cart";
 import UserPost from "../../Collections/Posts/UserPost";
 import Wishlist from "../../Collections/Wishlist/Wishlist";
+import { Link } from "react-router-dom";
 
 function Admin() {
   // const [acFunc, setAcFunc] = useState(false);
@@ -307,7 +308,7 @@ function Admin() {
           {forAdmin && (
             <>
               <p className="mainPara">Admin</p>
-              <p className="normalPara">Add New Book</p>
+              <p className="normalPara"><Link to="/addNewBook">Add New Book</Link></p>
               <p className="normalPara">Create Coupon</p>
             </>
           )}
@@ -372,14 +373,14 @@ function Admin() {
               <h2>Following {redBookUser && redBookUser.following.length}</h2>
             </div>
             {
-              redBookUser.admin && <div style={{backgroundColor:userPostsC && "rgba(39, 39, 39, 0.925)"}} 
+              redBookUser.admin && <div style={{borderBottomStyle:userPostsC && "groove"}} 
               onClick={()=>{
                 setUserPostsC(true);
                 setUserWishListC(false);
                 setUserCartC(false);
               }}><h2>Posted Books {redBookUser.postedBooks.length}</h2></div>
             }
-            <div style={{backgroundColor:userCartC && "rgba(39, 39, 39, 0.925)"}} 
+            <div style={{borderBottomStyle:userCartC && "groove"}} 
               onClick={()=>{
               setUserCartC(true);
               setUserWishListC(false);
@@ -387,7 +388,7 @@ function Admin() {
             }}>
               <h2>Cart Items {redBookUser && redBookUser.cart.length}</h2>
             </div>
-            <div style={{backgroundColor:userWishListC && "rgba(39, 39, 39, 0.925)"}}
+            <div style={{borderBottomStyle:userWishListC && "groove"}}
              onClick={()=>{
               setUserWishListC(true);
               setUserCartC(false);
