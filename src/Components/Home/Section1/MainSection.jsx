@@ -1,8 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./MainSection.css";
 import {Link} from "react-router-dom"
+import axios from "axios";
+import Card from "../../Cards/Card";
 function MainSection() {
   const [rangePrice, setRangePrice] = useState(500);
+  const [allBooks, setAllBooks] = useState();
+
+  const getAllBooks = async ()=>{
+    try {
+      const getBooks = await axios.get("http://localhost:3500/api/books/getAllBooks");
+      setAllBooks(getBooks.data.allBooks)
+      console.log("This is all get books from book data base ", getBooks);
+    } catch (error) {
+      console.log("There is some errors in your get all book function plz fix the bug first ", error);
+    }
+  }
+  useEffect(()=>{
+    getAllBooks();
+  }, []);
+  console.log(allBooks);
+  
   return (
     <section className="mainSection">
 
@@ -81,7 +99,15 @@ function MainSection() {
         </div>
 
       </div>
-      <div className="prods"></div>
+      <div className="prods">
+        {
+          !allBooks ? <h1>Sorry there is no books available here..</h1>
+          : allBooks.map((book)=>{
+            return <Card book={book}></Card>
+          })
+        }
+       
+      </div>
     </section>
   );
 }

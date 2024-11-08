@@ -8,6 +8,7 @@ import Admin from './Components/Account/Admin/Admin';
 import MainSection from './Components/Home/Section1/MainSection';
 import { AppProvider } from '../Context/userAuthContext';
 import AddNewBook from './Components/AddProduct/AddNewBook';
+import ReadBook from './Components/Home/ReadBook/ReadBook';
 function App() {
   
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/adminPage" element={<Admin></Admin>}></Route>
         <Route path="/mainSection" element={<MainSection></MainSection>}></Route>
         <Route path="/addNewBook" element={<AddNewBook></AddNewBook>}></Route>
+        <Route path='/readWholeBook/:bookID' element={<ReadBook></ReadBook>}></Route>
      </Routes>
      </BrowserRouter>
     </main>

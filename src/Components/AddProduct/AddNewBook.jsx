@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import "./AddNewBook.css";
 import FroalaEditor from "froala-editor";
 import "froala-editor/js/plugins/align.min.js";
-import "froala-editor/js/plugins/image.min.js";
-import "froala-editor/js/plugins/file.min.js";
 import "froala-editor/css/froala_editor.pkgd.min.css";
+import axios from "axios";
 
 function AddNewBook() {
+  const [redBookUser, setRedBookUser] = useState(JSON.parse(localStorage.getItem("REDBOOK_User")) || "");
   const editorRef = useRef(null);
   const froalaInstanceRef = useRef(null);
   const [pages, setPages] = useState([]);
@@ -23,6 +23,7 @@ function AddNewBook() {
   const [isFree, setIsFree] = useState(false);
   const [samplePages, setSamplePages] = useState("");
   const [savedBook, setSavedBook] = useState([]);
+  const [mainBookCover, setMainBookCover] = useState('');
 
   const [localSaveBook, setLocalSaveBook] = useState();
 
@@ -33,13 +34,9 @@ function AddNewBook() {
           "bold",
           "italic",
           "underline",
-          "insertImage",
-          "insertFile",
           "undo",
           "redo",
         ],
-        imageUpload: true,
-        fileUpload: true,
         events: {
           contentChanged: () => {
             console.log("Content updated");
@@ -48,9 +45,10 @@ function AddNewBook() {
       });
     }
   };
-
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
+    setMainBookCover(e.target.files[0]);
+    console.log("This is main book cover ", mainBookCover);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -59,10 +57,8 @@ function AddNewBook() {
       reader.readAsDataURL(file);
     }
   };
-  //   useEffect(() => {
-  //     // Save to local storage whenever `savedBook` updates
-  //     localStorage.setItem("savedBook", JSON.stringify(savedBook));
-  // }, [savedBook]);
+  
+  console.log("This is main book cover ", mainBookCover);
 
   const handleSavePage = () => {
     if (froalaInstanceRef.current) {
@@ -70,23 +66,11 @@ function AddNewBook() {
       const textContent = rawHTML
         .replace(/<\/?[^>]+(>|$)/g, "") // Remove HTML tags
         .replace(/&nbsp;/g, " "); // Replace &nbsp; with a regular space
-
-      const images = Array.from(editorRef.current.querySelectorAll("img")).map(
-        (img) => img.src
-      );
-      const files = Array.from(editorRef.current.querySelectorAll("a")).map(
-        (link) => link.href
-      );
-
       const page = {
         pageNumber: currentPage,
-        content: textContent,
-        images,
-        files,
+        content: textContent
       };
-
       setPages((prevPages) => [...prevPages, page]);
-
       setSavedBook((prev) => {
         const updatedSavedBook = {
           bookName,
@@ -98,61 +82,63 @@ function AddNewBook() {
           categories,
           price,
           pages: [...pages, page], // Ensure latest page is included
-          bookCoverImg,
+          mainBookCover,
           availableCopies,
           samplePages,
           currentPage,
         };
-
-        // Update localStorage synchronously after setting savedBook
         localStorage.setItem("AUTHOR_BOOK", JSON.stringify(updatedSavedBook));
-
-        return updatedSavedBook; // Return updated book data to set state
+        return updatedSavedBook;
       });
-      /* setSavedBook(prev => {
-  const updatedSavedBook = {
-    bookName,
-    bookTitle,
-    description,
-    author,
-    ISBN,
-    isFree,
-    categories,
-    price,
-    pages: [...pages, page], // Ensure latest page is included
-    bookCoverImg,
-    availableCopies,
-    samplePages,
-    currentPage
-  };
-  return updatedSavedBook;
-});
- */
       froalaInstanceRef.current.html.set("");
       setCurrentPage(currentPage + 1);
     }
   };
-  // console.log(bookName);
-  useEffect(() => {
-    if (savedBook) {
-      // localStorage.setItem("AUTHOR_BOOK", JSON.stringify(savedBook));
-      console.log("Book saved:", savedBook);
-    }
-    if (JSON.parse(localStorage.getItem("AUTHOR_BOOK"))) {
-      console.log(JSON.parse(localStorage.getItem("AUTHOR_BOOK")));
-    }
-  }, [savedBook]);
-  // Handle submitting the book
-  const handleSubmitBook = (e) => {
+
+  const handleSubmitBook = async (e) => {
     e.preventDefault();
-    console.log("Book pages:", pages, bookName, bookTitle, description);
+
+    const storedBook = JSON.parse(localStorage.getItem("AUTHOR_BOOK"));
+    const formData = new FormData();
+    formData.append("ISBN", storedBook.ISBN);
+    formData.append("author", storedBook.author);
+    formData.append("availableCopies", storedBook.availableCopies);
+    formData.append("mainBookCover", mainBookCover);
+    formData.append("bookName", storedBook.bookName);
+    formData.append("bookTitle", storedBook.bookTitle);
+    formData.append("categories", storedBook.categories);
+    formData.append("currentPage", storedBook.currentPage);
+    formData.append("description", storedBook.description);
+    formData.append("isFree", storedBook.isFree);
+    formData.append("price", storedBook.price);
+    formData.append("samplePages", storedBook.samplePages);
+    formData.append("pages", JSON.stringify(storedBook.pages));
+
+    try {
+        const submittedBook = await axios.post(
+          `http://localhost:3500/api/books/postNewBook${redBookUser._id}`,
+          formData,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log("This is forme data ", submittedBook);
+        localStorage.removeItem("AUTHOR_BOOK");
+    } catch (error) {
+      console.log(
+        "There are some errors in your handleSubmitBook function. Please fix the bug first:",
+        error
+      );
+    }
   };
+
   if (editorRef.current && !froalaInstanceRef.current) {
     initializeEditor();
   }
-  console.log("This is locally save book ", localSaveBook);
   useEffect(() => {
-    // Retrieve the saved book data from localStorage
     const storedBook = JSON.parse(localStorage.getItem("AUTHOR_BOOK"));
     if (storedBook) {
       setLocalSaveBook(storedBook);
@@ -162,7 +148,7 @@ function AddNewBook() {
       setDescription(storedBook.description || "");
       setCategories(storedBook.categories || "");
       setISBN(storedBook.ISBN || "");
-      setBookCoverImg(storedBook.bookCoverImg || "");
+      setMainBookCover(storedBook.mainBookCover || "");
       setPrice(storedBook.price || "");
       setAvailableCopies(storedBook.availableCopies || "");
       setIsFree(storedBook.isFree || false);
@@ -173,7 +159,7 @@ function AddNewBook() {
   return (
     <section className="addNewBookSection">
       <div className="formContainer">
-        <form onSubmit={handleSubmitBook}>
+        <form onSubmit={handleSubmitBook} encType="multipart/form-data">
           <input
             type="text"
             name="bookName"
@@ -283,7 +269,7 @@ function AddNewBook() {
           </label>
           <label>
             Upload Book Cover:
-            <input type="file" accept="image/*" onChange={handleImageUpload} />
+            <input type="file" onChange={handleImageUpload} />
           </label>
           <input
             type="number"
