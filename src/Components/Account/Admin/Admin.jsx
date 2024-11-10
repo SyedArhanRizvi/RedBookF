@@ -7,6 +7,8 @@ import UserPost from "../../Collections/Posts/UserPost";
 import Wishlist from "../../Collections/Wishlist/Wishlist";
 import { Link } from "react-router-dom";
 import { useAppContext } from "../../../../Context/userAuthContext";
+import Draggable from 'react-draggable';
+import { motion } from 'framer-motion';
 
 function Admin() {
   // const [acFunc, setAcFunc] = useState(false);
@@ -25,6 +27,66 @@ function Admin() {
   const [editAcPopUp, setEditAcPopUp] = useState(false);
   const [adminLoginPopUp, setAdminPopUp] = useState(false);
   const [removedAcPopUp, setRemovedAcPopUp] = useState(false);
+  // const [postDeletePopUp, setPostDeletePopUp] = useState(false);
+  const [chatbot, setChatBot] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+
+  const handleMinimize = () => setIsMinimized(!isMinimized);
+  const handleOpen = () => setIsOpen(!isOpen);
+
+  const handleSend = () => {
+    if (input.trim()) {
+        // Add user message to the chat
+        setMessages([...messages, { sender: 'user', text: input }]);
+        
+        // Clear input field
+        setInput('');
+
+        const aiChatbotHandler = async () => {
+            const options = {
+                method: 'POST',
+                url: 'https://gemini-pro-ai.p.rapidapi.com/',
+                headers: {
+                    'x-rapidapi-key': 'fbbf913b1dmsh38f4eb90dd4b319p1e3a2ajsn049ef0ecad4e',
+                    'x-rapidapi-host': 'gemini-pro-ai.p.rapidapi.com',
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    contents: [
+                        {
+                            role: 'user',
+                            parts: [{ text: input }]
+                        }
+                    ]
+                }
+            };
+
+            try {
+                const response = await axios.request(options);
+                
+                // Update chat with bot's response
+                setMessages(prevMessages => [
+                    ...prevMessages,
+                    { sender: 'bot', text: response.data.reply || 'AI response unavailable' }
+                ]);
+            } catch (error) {
+                console.log("There was an error with the AI handler:", error);
+                
+                // Add error message to the chat
+                setMessages(prevMessages => [
+                    ...prevMessages,
+                    { sender: 'bot', text: 'Error: Unable to fetch response.' }
+                ]);
+            }
+        };
+
+        // Call the AI chatbot handler function to get the bot's response
+        aiChatbotHandler();
+    }
+};
 
   
 
@@ -386,6 +448,51 @@ function Admin() {
         </div>
       )}
 
+      {/* PopUp for Chat Boat */}
+
+      {
+        chatbot && <Draggable>
+        <motion.div
+            className={`chatbotContainer ${isMinimized ? 'minimized' : 'expanded'}`}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+        >
+            {isMinimized ? (
+                <div className="circleMode" onClick={handleMinimize}>
+                    <p>💬</p>
+                </div>
+            ) : (
+                <div className="popupContent">
+                    <h2>Chatbot</h2>
+                    <p>How can I help you today?</p>
+                    <div className="chatWindow">
+                        {messages.map((msg, index) => (
+                            <div key={index} className={`message ${msg.sender}`}>
+                                <p>{msg.text}</p>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="inputContainer">
+                        <input
+                            type="text"
+                            placeholder="Type your message..."
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                        />
+                        <button onClick={handleSend} className="sendButton">Send</button>
+                    </div>
+                    <div className="buttonContainer">
+                        <button onClick={handleMinimize} className="removeButton">Remove</button>
+                        <button onClick={handleOpen} className="openButton">Open Chat</button>
+                    </div>
+                </div>
+            )}
+        </motion.div>
+    </Draggable>
+      }
+      
+
       {/* --------------------- */}
       <div className="sidePage">
         <div className="s1">
@@ -409,7 +516,7 @@ function Admin() {
             </p>{" "}
             <p className="normalPara">Share Account</p>
           </>
-          <p className="normalPara">ChatBot</p>
+          <p className="normalPara" onClick={()=>setChatBot((prev)=>!prev)}>ChatBot</p>
           <p className="normalPara">Explore</p>
           <p className="mainPara">Settings</p>
           <p className="normalPara">Change Theme</p>

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import "./BookEditor.css";
+import { useNavigate } from 'react-router';
+import axios from 'axios';
 
 function BookEditor() {
   const [bookDetails, setBookDetails] = useState();
+  const navigate = useNavigate();
 
   console.log("Hello we are in the book editors page");
 
@@ -35,16 +38,27 @@ function BookEditor() {
   };
 
   // Save changes to localStorage
-  const handleSave = () => {
-    localStorage.setItem('bookData', JSON.stringify(bookDetails));
-    alert('Changes saved successfully!');
+  const handleSave = async () => {
+    try {
+      const updatedBook = await axios.put(`http://localhost:3500/api/books/updateBookInfo${bookDetails._id}`, bookDetails, {withCredentials:true});
+      alert('Changes saved successfully!');
+      localStorage.removeItem("AUTHOR_BOOK");
+      navigate("/adminPage");
+    } catch (error) {
+      console.log("There is some errors in your handle save change function so plz fix the bug first ", error);
+    }
+    
   };
+  const backToAdminSection = ()=>{
+    localStorage.removeItem("AUTHOR_BOOK");
+    navigate("/adminPage");
+  }
 
   return (
     <section className="bookEditorContainer">
       <div className="bookEditorHeader">
         <h2>Edit Book: {bookDetails && bookDetails.bookName}</h2>
-        <button className="backButton" onClick={() => window.history.back()}>
+        <button className="backButton" onClick={backToAdminSection}>
           Back
         </button>
       </div>
