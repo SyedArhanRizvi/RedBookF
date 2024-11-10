@@ -6,6 +6,8 @@
     position: relative;
     color: white;
     background: #000;
+    /* background: #000; */
+    /* padding-bottom: 50px; */
 }
 
 /* POP UP SECTION */
@@ -416,7 +418,7 @@
 .userPage .sidePage .s1 .normalPara {
     cursor: pointer;
     transition: 0.5s;
-    padding: 10px 30px;
+    padding: 10px 25px;
 }
 .userPage .sidePage .s1 .normalPara a{
     text-decoration: none;
@@ -593,5 +595,6 @@
     gap: 20px;
     padding-top: 40px;
     position: relative;
-    /* background: cadetblue; */
+    background-color: #1a1a1a; /* Dark background */
+    color: #e0e0e0; /* Light text color */
 }

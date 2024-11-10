@@ -9,6 +9,7 @@ import MainSection from './Components/Home/Section1/MainSection';
 import { AppProvider } from '../Context/userAuthContext';
 import AddNewBook from './Components/AddProduct/AddNewBook';
 import ReadBook from './Components/Home/ReadBook/ReadBook';
+import BookEditor from './Components/Home/BookEditor/BookEditor';
 function App() {
   
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/mainSection" element={<MainSection></MainSection>}></Route>
         <Route path="/addNewBook" element={<AddNewBook></AddNewBook>}></Route>
         <Route path='/readWholeBook/:bookID' element={<ReadBook></ReadBook>}></Route>
+        <Route path='/bookEditorPage' element={<BookEditor></BookEditor>}></Route>
      </Routes>
      </BrowserRouter>
     </main>

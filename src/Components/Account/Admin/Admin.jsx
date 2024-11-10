@@ -6,12 +6,18 @@ import Cart from "../../Collections/Cart/Cart";
 import UserPost from "../../Collections/Posts/UserPost";
 import Wishlist from "../../Collections/Wishlist/Wishlist";
 import { Link } from "react-router-dom";
+import { useAppContext } from "../../../../Context/userAuthContext";
 
 function Admin() {
   // const [acFunc, setAcFunc] = useState(false);
+  const { rbUserPosts, setRBUserPosts } = useAppContext();
+  
   const navigate = useNavigate();
+  const [adminAuth, setAdminAuth] = useState(false);
 
-  const [redBookUser, setRedBookUser] = useState(JSON.parse(localStorage.getItem("REDBOOK_User")) || "");
+  const [redBookUser, setRedBookUser] = useState(
+    JSON.parse(localStorage.getItem("REDBOOK_User")) || ""
+  );
   const [forAdmin, setForAdmin] = useState(redBookUser && redBookUser.admin);
   // POP UP STATES ::
   const [logoutPopUp, setLogOutPopUp] = useState(false);
@@ -20,23 +26,50 @@ function Admin() {
   const [adminLoginPopUp, setAdminPopUp] = useState(false);
   const [removedAcPopUp, setRemovedAcPopUp] = useState(false);
 
+  
+
+  // ---------------------- //
+  useEffect(() => {
+    if (redBookUser.admin === true) {
+      const getUserPostedBooks = async () => {
+        try {
+          const userPostedBooks = await axios.get(
+            `http://localhost:3500/api/books/getUserPostedBook${redBookUser._id}`
+          );
+          setRBUserPosts(userPostedBooks.data.userPostedBooks);
+        } catch (error) {
+          console.log(
+            "There is some errors in your get user posted book handle plz fix the bug first ",
+            error
+          );
+        }
+      };
+      getUserPostedBooks();
+    }
+  }, [redBookUser]);
+
+  
   // FOR BASIC DETAILS STATES ::
-  const [authorType, setAuthorType] = useState('');
+  const [authorType, setAuthorType] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState(redBookUser && redBookUser.fullName);
   const [username, setUsername] = useState(redBookUser && redBookUser.username);
   const [email, setEmail] = useState(redBookUser && redBookUser.email);
   const [phone, setPhone] = useState(redBookUser && redBookUser.phone);
   const [userProfileImg, setUserProfileImg] = useState();
-  const [imageSrc, setImageSrc] = useState(redBookUser && redBookUser.userProfileImg);
-  const [description, setDescription] = useState(redBookUser && redBookUser.userDescription);
+  const [imageSrc, setImageSrc] = useState(
+    redBookUser && redBookUser.userProfileImg
+  );
+  const [description, setDescription] = useState(
+    redBookUser && redBookUser.userDescription
+  );
 
   // PopUp for Wishlist and Cart and User Posts Container ::
-  const [userPostsC, setUserPostsC] = useState(false);
+  const [userPostsC, setUserPostsC] = useState(true);
   const [userWishListC, setUserWishListC] = useState(false);
-  const [userCartC, setUserCartC] = useState(true);
-  
-  // All Functions 
+  const [userCartC, setUserCartC] = useState(false);
+
+  // All Functions
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     setUserProfileImg(event.target.files[0]);
@@ -51,12 +84,12 @@ function Admin() {
   const deleteAccount = async (e) => {
     e.preventDefault();
     console.log(email, password);
-    
+
     try {
       const deletedUser = await axios.post(
         "http://localhost:3500/api/user/deleteUserAccount",
-        {email, password},
-        {withCredentials: true}
+        { email, password },
+        { withCredentials: true }
       );
       console.log(deletedUser);
       if (deletedUser.status === 201) {
@@ -101,41 +134,67 @@ function Admin() {
       );
     }
   };
-  const adminAccountController = async (e)=>{
+  const adminAccountController = async (e) => {
     e.preventDefault();
     try {
-      const createdAdmin = await axios.put("http://localhost:3500/api/user/createAdminAccount", {email, password, authorType});
-      if(createdAdmin.status === 201) {
-        localStorage.setItem("REDBOOK_User", JSON.stringify(createdAdmin.data.user));
+      const createdAdmin = await axios.put(
+        "http://localhost:3500/api/user/createAdminAccount",
+        { email, password, authorType }
+      );
+      if (createdAdmin.status === 201) {
+        localStorage.setItem(
+          "REDBOOK_User",
+          JSON.stringify(createdAdmin.data.user)
+        );
         setForAdmin(true);
         setAdminPopUp(false);
       }
     } catch (error) {
-      console.log("There is some errors in your admin account controller function plz fix the bug first ", error);    
+      console.log(
+        "There is some errors in your admin account controller function plz fix the bug first ",
+        error
+      );
     }
-  }
-  const removeAdminAccountHandler = async ()=>{
+  };
+  const removeAdminAccountHandler = async () => {
     try {
-      const removedAdmin = await axios.put(`http://localhost:3500/api/user/removeAdminAccount${redBookUser._id}`, {}, {withCredentials:true});
-      if(removedAdmin.status === 201) {
-        localStorage.setItem("REDBOOK_User", JSON.stringify(removedAdmin.data.removedAdmin));
+      const removedAdmin = await axios.put(
+        `http://localhost:3500/api/user/removeAdminAccount${redBookUser._id}`,
+        {},
+        { withCredentials: true }
+      );
+      if (removedAdmin.status === 201) {
+        localStorage.setItem(
+          "REDBOOK_User",
+          JSON.stringify(removedAdmin.data.removedAdmin)
+        );
         setRemovedAcPopUp(false);
       }
     } catch (error) {
-      console.log("There is some errors in your remove admin account handler plz fix the bug first ", error);   
+      console.log(
+        "There is some errors in your remove admin account handler plz fix the bug first ",
+        error
+      );
     }
-  }
-  const logoutHandler = async (e)=> {
+  };
+  const logoutHandler = async (e) => {
     try {
-       const deletedUser = await axios.post(`http://localhost:3500/api/user/loggedOutAccount/${redBookUser._id}`, {}, {withCredentials:true});
-      if(deletedUser.status === 200) {
+      const deletedUser = await axios.post(
+        `http://localhost:3500/api/user/loggedOutAccount/${redBookUser._id}`,
+        {},
+        { withCredentials: true }
+      );
+      if (deletedUser.status === 200) {
         localStorage.removeItem("REDBOOK_User");
         navigate("/");
       }
     } catch (error) {
-      console.log("There is some errors in your logout handler plz fix the bug first ", error);  
+      console.log(
+        "There is some errors in your logout handler plz fix the bug first ",
+        error
+      );
     }
-  }
+  };
 
   return (
     <section className="userPage">
@@ -174,7 +233,9 @@ function Admin() {
       {logoutPopUp && (
         <div className="logout2PpUp">
           <div>
-            <h1 style={{color:"red", borderBottomStyle:"groove"}}>Warning</h1>
+            <h1 style={{ color: "red", borderBottomStyle: "groove" }}>
+              Warning
+            </h1>
             <p>
               "Are you sure you want to log out? Logging out will end your
               current session, and any unsaved changes may be lost. To continue
@@ -251,64 +312,89 @@ function Admin() {
       )}
 
       {/* POP UP FOR ADMIN ACCOUNT CREATION */}
-      {
-        adminLoginPopUp &&   <div className="adminAcPopUp">
-        <form onSubmit={adminAccountController}>
-          <input
-            type="text"
-            name="email"
-            placeholder="Enter your email here.."
-            onChange={(e)=>setEmail(e.target.value)}
-          />
-          <input
-            type="text"
-            name="password"
-            placeholder="Enter your password here.."
-            onChange={(e)=>setPassword(e.target.value)}
-          />
-          <select name="writerCategory" id="writerCategory" onChange={(e)=>setAuthorType(e.target.value)}>
-            <option value="" disabled selected>
-              Select writer category
-            </option>
-            <option value="poet">Poet</option>
-            <option value="novelist">Novelist</option>
-            <option value="essayist">Essayist</option>
-            <option value="journalist">Journalist</option>
-            <option value="playwright">Playwright</option>
-            <option value="screenwriter">Screenwriter</option>
-            <option value="biographer">Biographer</option>
-            <option value="critic">Critic</option>
-            <option value="travel-writer">Travel Writer</option>
-            <option value="technical-writer">Technical Writer</option>
-            <option value="children-writer">Children’s Writer</option>
-            <option value="science-writer">Science Writer</option>
-            <option value="other-writer">Other Writer</option>
-          </select>
-          <input className="btn" type="submit" value={"Create Admin Account"} />
-          <button className="cancel" onClick={() => setAdminPopUp((prev) => !prev)}>Cancel</button>
-        </form>
-      </div>
-      }
-
-      {
-        removedAcPopUp && <div className="removedAcPopUp">
-          <div><h1 style={{color:"red", borderBottomStyle:"groove"}}>Warning</h1>
-          <p>"Are you sure you want to remove your admin account? You will not access your lots of REDBOOK features like would't add your books in our platform and you would't access your current book data To continue
-              using all features and keep your data secure, make sure to save
-              your work before remove your account. You’ll need to log in again to
-              access your account and resume your activity."</p>
-              <button onClick={removeAdminAccountHandler}>Remove</button>
-              <button className="cancel" onClick={()=>setRemovedAcPopUp(false)}>Cancel</button></div>
+      {adminLoginPopUp && (
+        <div className="adminAcPopUp">
+          <form onSubmit={adminAccountController}>
+            <input
+              type="text"
+              name="email"
+              placeholder="Enter your email here.."
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="text"
+              name="password"
+              placeholder="Enter your password here.."
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <select
+              name="writerCategory"
+              id="writerCategory"
+              onChange={(e) => setAuthorType(e.target.value)}
+            >
+              <option value="" disabled selected>
+                Select writer category
+              </option>
+              <option value="poet">Poet</option>
+              <option value="novelist">Novelist</option>
+              <option value="essayist">Essayist</option>
+              <option value="journalist">Journalist</option>
+              <option value="playwright">Playwright</option>
+              <option value="screenwriter">Screenwriter</option>
+              <option value="biographer">Biographer</option>
+              <option value="critic">Critic</option>
+              <option value="travel-writer">Travel Writer</option>
+              <option value="technical-writer">Technical Writer</option>
+              <option value="children-writer">Children’s Writer</option>
+              <option value="science-writer">Science Writer</option>
+              <option value="other-writer">Other Writer</option>
+            </select>
+            <input
+              className="btn"
+              type="submit"
+              value={"Create Admin Account"}
+            />
+            <button
+              className="cancel"
+              onClick={() => setAdminPopUp((prev) => !prev)}
+            >
+              Cancel
+            </button>
+          </form>
         </div>
-      }
-    
+      )}
+
+      {removedAcPopUp && (
+        <div className="removedAcPopUp">
+          <div>
+            <h1 style={{ color: "red", borderBottomStyle: "groove" }}>
+              Warning
+            </h1>
+            <p>
+              "Are you sure you want to remove your admin account? You will not
+              access your lots of REDBOOK features like would't add your books
+              in our platform and you would't access your current book data To
+              continue using all features and keep your data secure, make sure
+              to save your work before remove your account. You’ll need to log
+              in again to access your account and resume your activity."
+            </p>
+            <button onClick={removeAdminAccountHandler}>Remove</button>
+            <button className="cancel" onClick={() => setRemovedAcPopUp(false)}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* --------------------- */}
       <div className="sidePage">
         <div className="s1">
           {forAdmin && (
             <>
               <p className="mainPara">Admin</p>
-              <p className="normalPara"><Link to="/addNewBook">Add New Book</Link></p>
+              <p className="normalPara">
+                <Link to="/addNewBook">Add New Book</Link>
+              </p>
               <p className="normalPara">Create Coupon</p>
             </>
           )}
@@ -331,11 +417,19 @@ function Admin() {
           <p className="normalPara">Change Password</p>
         </div>
         <div className="s2">
-          {
-            forAdmin ? <p className="p" onClick={()=>setRemovedAcPopUp(true)}>Remove Admin Account</p> : <p className="p" onClick={()=>setAdminPopUp((prev)=>!prev)}>Want to became an admin ?</p>
-          }
-          
-          <p className="btn" onClick={()=>setDeletePopUp(true)}>Delete Account</p>
+          {forAdmin ? (
+            <p className="p" onClick={() => setRemovedAcPopUp(true)}>
+              Remove Admin Account
+            </p>
+          ) : (
+            <p className="p" onClick={() => setAdminPopUp((prev) => !prev)}>
+              Want to became an admin ?
+            </p>
+          )}
+
+          <p className="btn" onClick={() => setDeletePopUp(true)}>
+            Delete Account
+          </p>
         </div>
       </div>
       <div className="maindiv">
@@ -350,7 +444,11 @@ function Admin() {
               <p>
                 <span>{redBookUser && redBookUser.userDescription}.</span>
               </p>
-              <p><span className="authorType">{redBookUser.admin && redBookUser.authorType.toUpperCase()}</span></p>
+              <p>
+                <span className="authorType">
+                  {redBookUser.admin && redBookUser.authorType.toUpperCase()}
+                </span>
+              </p>
             </div>
           </div>
           <div className="notifications">
@@ -372,41 +470,43 @@ function Admin() {
             <div>
               <h2>Following {redBookUser && redBookUser.following.length}</h2>
             </div>
-            {
-              redBookUser.admin && <div style={{borderBottomStyle:userPostsC && "groove"}} 
-              onClick={()=>{
-                setUserPostsC(true);
+            {redBookUser.admin && (
+              <div
+                style={{ borderBottomStyle: userPostsC && "groove" }}
+                onClick={() => {
+                  setUserPostsC(true);
+                  setUserWishListC(false);
+                  setUserCartC(false);
+                }}
+              >
+                <h2>Posted Books : {rbUserPosts.length}</h2>
+              </div>
+            )}
+            <div
+              style={{ borderBottomStyle: userCartC && "groove" }}
+              onClick={() => {
+                setUserCartC(true);
                 setUserWishListC(false);
-                setUserCartC(false);
-              }}><h2>Posted Books {redBookUser.postedBooks.length}</h2></div>
-            }
-            <div style={{borderBottomStyle:userCartC && "groove"}} 
-              onClick={()=>{
-              setUserCartC(true);
-              setUserWishListC(false);
-              setUserPostsC(false);
-            }}>
+                setUserPostsC(false);
+              }}
+            >
               <h2>Cart Items {redBookUser && redBookUser.cart.length}</h2>
             </div>
-            <div style={{borderBottomStyle:userWishListC && "groove"}}
-             onClick={()=>{
-              setUserWishListC(true);
-              setUserCartC(false);
-              setUserPostsC(false);
-            }}>
+            <div
+              style={{ borderBottomStyle: userWishListC && "groove" }}
+              onClick={() => {
+                setUserWishListC(true);
+                setUserCartC(false);
+                setUserPostsC(false);
+              }}
+            >
               <h2>Wishlist {redBookUser && redBookUser.wishlist.length}</h2>
             </div>
           </div>
           <div className="postContainer">
-           {
-            userCartC && <Cart/>
-           }
-           {
-            userPostsC && <UserPost></UserPost>
-           }
-           {
-            userWishListC && <Wishlist></Wishlist>
-           }
+            {userCartC && <Cart />}
+            {userPostsC && <UserPost></UserPost>}
+            {userWishListC && <Wishlist redBookUser={redBookUser}></Wishlist>}
           </div>
         </div>
       </div>

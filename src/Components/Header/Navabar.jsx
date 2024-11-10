@@ -10,6 +10,7 @@ function Navabar() {
   const {setUserAuth, userAuth} = useAppContext();
   const [loggedInUser, setLoggedInUser] = useState();
   
+  
   useEffect(() => {
     const callAuthChecker = async () => {
       try {
